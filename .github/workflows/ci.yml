@@ -49,9 +49,9 @@ jobs:
             - name: Generate Release Notes Preview
               if: matrix.os == 'ubuntu-latest'
               env:
-                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+                  OPENAI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
               run: |
-                  difflog generate --system-prompt "Generate developer friendly release notes based on this git history information. Include SHA hashes and structure the changelog in bullet points. don't make it too long. keep it clean."
+                  difflog generate --system-prompt "Generate developer friendly release notes based on this git history information. Include SHA hashes and structure the changelog in bullet points. don't make it too long. keep it clean." --print
 
             - name: Upload artifacts
               if: matrix.os == 'ubuntu-latest'
