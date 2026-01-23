@@ -4,6 +4,14 @@
 
 > *llm crafted release notes from your git history*
 
+
+<p align="center">
+<a href="https://github.com/nor0x/difflog/actions/workflows/ci.yml"><img src="https://github.com/nor0x/difflog/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+<a href="https://github.com/nor0x/difflog/actions/workflows/publish.yml"><img src="https://github.com/nor0x/difflog/actions/workflows/publish.yml/badge.svg" alt="Publish NuGet" /></a>
+<a href="https://www.nuget.org/packages/difflog"><img src="https://img.shields.io/nuget/v/difflog.svg" alt="NuGet" /></a>
+<a href="https://www.nuget.org/packages/difflog"><img src="https://img.shields.io/nuget/dt/difflog.svg" alt="NuGet Downloads" /></a>
+</p>
+
 # DiffLog
 
 DiffLog is a CLI tool that turns git history into polished release notes using AI. It scans commits, groups changes into clear sections, and formats the result for different audiences so you can ship release notes and changelogs faster.
