@@ -127,7 +127,7 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
                     .AddChoices(Enum.GetValues<Audience>())
                     .UseConverter(a => a switch
                     {
-                        Audience.Developers => "[yellow]:man_technologist:[/] Developers - Technical details, API changes, breaking changes",
+                        Audience.Developers => "[yellow]:laptop:[/] Developers - Technical details, API changes, breaking changes",
                         Audience.EndUsers => "[yellow]:bust_in_silhouette:[/] End Users - User-friendly feature descriptions",
                         Audience.SocialMedia => "[yellow]:mobile_phone:[/] Social Media - Brief, engaging announcements",
                         Audience.Executive => "[yellow]:bar_chart:[/] Executive - High-level business impact summary",

@@ -12,6 +12,10 @@
 <a href="https://www.nuget.org/packages/difflog"><img src="https://img.shields.io/nuget/dt/difflog.svg" alt="NuGet Downloads" /></a>
 </p>
 
+<p align="center">
+<img src="assets/screenshot.jpg" alt="Burner Screenshot" width="600" style="margin-bottom:20px" />
+</p>
+
 # DiffLog
 
 DiffLog is a CLI tool that turns git history into polished release notes using AI. It scans commits, groups changes into clear sections, and formats the result for different audiences so you can ship release notes and changelogs faster.
