@@ -1,13 +1,12 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="DiffLog Logo" width="300" />
+</p>
+
+> *llm crafted release notes from your git history*
+
 # DiffLog
 
-DiffLog is a CLI that turns git history into polished release notes using AI. It scans commits, groups changes into clear sections, and formats the result for different audiences so you can ship notes faster and keep stakeholders aligned.
-
-## Why it is useful
-
-- Saves time: generates release notes directly from commits.
-- Adapts to the audience: developer, end user, social, or executive summaries.
-- Consistent output: repeatable structure across releases.
-- Flexible delivery: multiple formats, optional files, and CI friendly.
+DiffLog is a CLI tool that turns git history into polished release notes using AI. It scans commits, groups changes into clear sections, and formats the result for different audiences so you can ship release notes and changelogs faster.
 
 ## Features
 
@@ -16,6 +15,7 @@ DiffLog is a CLI that turns git history into polished release notes using AI. It
 - Optional links to issues/PRs and contributor lists.
 - Interactive mode for guided runs.
 - Configurable system prompts per audience or per run.
+- CI friendly command-line interface.
 
 ## Installation
 
@@ -48,8 +48,7 @@ Options:
 - `-t|--to <REF>`: End reference (default `HEAD`).
 - `-a|--audience <AUDIENCE>`: Developers, EndUsers, SocialMedia, Executive.
 - `--format <FORMAT>`: Markdown, Html, PlainText, Json.
-- `-o|--output <FILE>`: Output file path (defaults to a generated file in the repository).
-- `--print`: Also print the generated release notes to the console.
+- `-o|--output <FILE>`: Output file path.
 - `--from-date <DATE>`: Include commits from date (yyyy-MM-dd).
 - `--to-date <DATE>`: Include commits until date (yyyy-MM-dd).
 - `--no-links`: Exclude issue/PR links.
@@ -66,7 +65,6 @@ Examples:
 difflog generate --from v1.0.0 --to v1.1.0 --format Markdown
 difflog generate -a EndUsers --format Html --output release-notes.html
 difflog generate --system-prompt-file prompts/social.txt
-difflog generate --print
 ```
 
 ### config
