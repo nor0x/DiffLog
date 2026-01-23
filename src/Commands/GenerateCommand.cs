@@ -153,24 +153,13 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
         }
 
         // Output file
-        var saveToFile = AnsiConsole.Confirm("Save to file?", false);
-        if (saveToFile)
-        {
-            var defaultName = $"release-notes-{DateTime.Now:yyyy-MM-dd}";
-            var extension = settings.Format switch
-            {
-                OutputFormat.Markdown => ".md",
-                OutputFormat.Html => ".html",
-                OutputFormat.Json => ".json",
-                _ => ".txt"
-            };
+        var defaultPath = BuildDefaultOutputPath(repoPath, settings.Format);
 
-            var defaultPath = Path.Combine(repoPath, $"{defaultName}{extension}");
+        settings.OutputPath = AnsiConsole.Ask(
+            "Output file path:",
+            defaultPath);
 
-            settings.OutputPath = AnsiConsole.Ask(
-                "Output file path:",
-                defaultPath);
-        }
+        settings.PrintToConsole = AnsiConsole.Confirm("Also print to console?", false);
 
         AnsiConsole.WriteLine();
 
@@ -213,7 +202,10 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
             FromDate = fromDate,
             ToDate = toDate,
             ExcludeCategories = excludeCategories,
-            OutputPath = settings.OutputPath,
+            OutputPath = string.IsNullOrWhiteSpace(settings.OutputPath)
+                ? BuildDefaultOutputPath(repoPath, settings.Format)
+                : settings.OutputPath,
+            PrintToConsole = settings.PrintToConsole,
             SystemPrompt = await ResolveSystemPromptAsync(settings)
         };
     }
@@ -265,6 +257,9 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
         if (!string.IsNullOrEmpty(options.OutputPath))
             table.AddRow("Output", options.OutputPath);
 
+        if (options.PrintToConsole)
+            table.AddRow("Console", "Yes");
+
         if (!string.IsNullOrWhiteSpace(options.SystemPrompt))
             table.AddRow("System Prompt", "Custom");
 
@@ -313,11 +308,24 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
 
     private static async Task OutputReleaseNotesAsync(ReleaseNotes releaseNotes, ReleaseNoteOptions options)
     {
+        // Save to file if specified
+        if (!string.IsNullOrEmpty(options.OutputPath))
+        {
+            await File.WriteAllTextAsync(options.OutputPath, releaseNotes.Content);
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine($"[green]✓[/] Saved to [link]{options.OutputPath}[/]");
+        }
+
+        if (!options.PrintToConsole)
+        {
+            return;
+        }
+
         AnsiConsole.WriteLine();
 
         // Display release notes
-        var panel = new Panel(releaseNotes.Content)
-            .Header($"[blue]{releaseNotes.Title}[/]")
+        var panel = new Panel(new Text(releaseNotes.Content))
+            .Header(Markup.Escape(releaseNotes.Title))
             .Border(BoxBorder.Double)
             .Expand();
 
@@ -328,15 +336,21 @@ public class GenerateCommand : AsyncCommand<GenerateSettings>
         AnsiConsole.Write(new Rule("[dim]Statistics[/]").LeftJustified());
         AnsiConsole.MarkupLine($"  [yellow]:bar_chart:[/] Commits: [blue]{releaseNotes.Commits.Count}[/]");
         AnsiConsole.MarkupLine($"  [yellow]:busts_in_silhouette:[/] Contributors: [blue]{releaseNotes.Contributors.Count}[/]");
-        AnsiConsole.MarkupLine($"  [yellow]:dart:[/] Audience: [blue]{releaseNotes.TargetAudience}[/]");
+        AnsiConsole.MarkupLine($"  [yellow]:bullseye:[/] Audience: [blue]{releaseNotes.TargetAudience}[/]");
         AnsiConsole.MarkupLine($"  [yellow]:page_facing_up:[/] Format: [blue]{releaseNotes.Format}[/]");
+    }
 
-        // Save to file if specified
-        if (!string.IsNullOrEmpty(options.OutputPath))
+    private static string BuildDefaultOutputPath(string repoPath, OutputFormat format)
+    {
+        var defaultName = $"difflog-{DateTime.Now:yyyy-MM-dd}";
+        var extension = format switch
         {
-            await File.WriteAllTextAsync(options.OutputPath, releaseNotes.Content);
-            AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine($"[green]✓[/] Saved to [link]{options.OutputPath}[/]");
-        }
+            OutputFormat.Markdown => ".md",
+            OutputFormat.Html => ".html",
+            OutputFormat.Json => ".json",
+            _ => ".txt"
+        };
+
+        return Path.Combine(repoPath, $"{defaultName}{extension}");
     }
 }

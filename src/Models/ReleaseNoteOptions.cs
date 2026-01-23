@@ -66,9 +66,14 @@ public record ReleaseNoteOptions
     public string RepositoryPath { get; init; } = ".";
 
     /// <summary>
-    /// Output file path (optional, defaults to console output).
+    /// Output file path (defaults to a generated file name).
     /// </summary>
     public string? OutputPath { get; init; }
+
+    /// <summary>
+    /// Also print release notes to the console.
+    /// </summary>
+    public bool PrintToConsole { get; init; }
 
     /// <summary>
     /// Optional system prompt override.

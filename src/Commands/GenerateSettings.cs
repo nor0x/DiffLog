@@ -34,8 +34,13 @@ public class GenerateSettings : CommandSettings
     public OutputFormat Format { get; set; } = OutputFormat.Markdown;
 
     [CommandOption("-o|--output <FILE>")]
-    [Description("Output file path. If not specified, outputs to console.")]
+    [Description("Output file path. Defaults to a generated file in the repository.")]
     public string? OutputPath { get; set; }
+
+    [CommandOption("--print")]
+    [Description("Also print the generated release notes to the console.")]
+    [DefaultValue(false)]
+    public bool PrintToConsole { get; set; }
 
     [CommandOption("--from-date <DATE>")]
     [Description("Include commits from this date (yyyy-MM-dd).")]
