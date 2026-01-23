@@ -194,3 +194,11 @@ or use `test-local-tool.ps1` script to pack and install the tool from source.
 - .NET 10 SDK
 - Spectre.Console / Spectre.Console.Cli
 - Microsoft.Extensions.AI + OpenAI client
+
+
+# Contributing
+Fork and submit pull requests! Happy coding!
+
+<p align="center">
+  <img src="assets/icon.png" alt="DiffLog Logo" width="100" />
+</p>

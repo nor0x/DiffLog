@@ -11,13 +11,19 @@
     <ToolCommandName>difflog</ToolCommandName>
     <PackageId>DiffLog</PackageId>
     <Version>1.0.0</Version>
-    <Authors>Your Name</Authors>
-    <Description>A tool for analyzing and displaying diff logs</Description>
+    <Authors>Joachim Leonfellner</Authors>
+    <Description>llm crafted release notes from your git history</Description>
     <PackageProjectUrl>https://github.com/nor0x/DiffLog</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nor0x/DiffLog</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>diff;log;cli;tool</PackageTags>
+    <PackageTags>release-notes;changelog;git;diff;ai;llm;openai</PackageTags>
     <CommitHash>unknown</CommitHash>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +33,11 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
     <PackageReference Include="Spectre.Console" Version="0.54.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\readme.md" Pack="true" PackagePath="\" />
+    <None Include="..\assets\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
