@@ -116,6 +116,67 @@ System prompt resolution order:
 2. Stored prompt for the selected audience
 3. Built-in defaults
 
+## GitHub Actions
+
+Use DiffLog in your CI/CD pipeline to automatically generate release notes. Add your OpenAI API key as a repository secret (`OPENAI_API_KEY`).
+
+```yaml
+name: Generate Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for full git history
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install DiffLog
+        run: dotnet tool install -g DiffLog
+
+      - name: Generate Release Notes
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional: override model or base URL
+          # OPENAI_MODEL: gpt-4o
+          # OPENAI_BASE_URL: https://your-endpoint.openai.azure.com
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+          
+          if [ -n "$PREV_TAG" ]; then
+            difflog generate --from $PREV_TAG --to $CURRENT_TAG --format Markdown -o release-notes.md
+          else
+            difflog generate --to $CURRENT_TAG --format Markdown -o release-notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+```
+
+For scheduled changelog generation or PR-based workflows:
+
+```yaml
+- name: Generate Weekly Changelog
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  run: |
+    difflog generate --from-date $(date -d '7 days ago' +%Y-%m-%d) --format Markdown -o changelog.md
+```
+
 ## Development
 
 Build and pack locally:
@@ -124,6 +185,9 @@ Build and pack locally:
 dotnet build src/DiffLog.csproj -c Release
 dotnet pack src/DiffLog.csproj -c Release -o ./artifacts
 ```
+
+or use `test-local-tool.ps1` script to pack and install the tool from source.
+
 
 ## Dependencies
 
