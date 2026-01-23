@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -68,9 +70,25 @@ jobs:
       - name: Publish to GitHub Packages
         run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate
 
+      - name: Install DiffLog
+        run: dotnet tool install -g DiffLog
+
+      - name: Generate Release Notes
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          CURRENT_TAG=${GITHUB_REF#refs/tags/v}
+          
+          if [ -n "$PREV_TAG" ]; then
+            difflog generate --from $PREV_TAG --to v$CURRENT_TAG --format Markdown -o release-notes.md --system-prompt "Generate developer friendly release notes based on this git history information. Include SHA hashes and structure the changelog in bullet points. don't make it too long. keep it clean."
+          else
+            difflog generate --to v$CURRENT_TAG --format Markdown -o release-notes.md --system-prompt "Generate developer friendly release notes based on this git history information. Include SHA hashes and structure the changelog in bullet points. don't make it too long. keep it clean."
+          fi
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           files: ./artifacts/*.nupkg
-          generate_release_notes: true
+          body_path: release-notes.md
