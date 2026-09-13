@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiffLog — llm crafted release notes from your git history</title>
+<meta name="description" content="DiffLog is a CLI tool that turns git history into polished release notes using AI. Generate changelogs for developers, end users, executives or social media.">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="ticker">
+    <div class="ticker__track">
+      <span>★ NEW: llm crafted release notes from your git history ★</span>
+      <span>★ Markdown / HTML / Plain Text / JSON output ★</span>
+      <span>★ Available on NuGet as a .NET global tool ★</span>
+      <span>★ CI friendly — drop it straight into GitHub Actions ★</span>
+      <span>★ NEW: llm crafted release notes from your git history ★</span>
+      <span>★ Markdown / HTML / Plain Text / JSON output ★</span>
+      <span>★ Available on NuGet as a .NET global tool ★</span>
+      <span>★ CI friendly — drop it straight into GitHub Actions ★</span>
+    </div>
+  </div>
+
+  <nav class="topnav">
+    <a href="index.html" class="current">Home</a> <span class="sep">|</span> <a href="docs.html">Documentation</a> <span class="sep">|</span> <a href="https://github.com/nor0x/DiffLog">GitHub</a> <span class="sep">|</span> <a href="https://www.nuget.org/packages/difflog">NuGet</a>
+  </nav>
+
+  <header class="banner">
+    <img class="logo" src="assets/logo.svg" alt="DiffLog logo">
+    <p class="tagline">"llm crafted release notes from your git history"</p>
+    <div class="badges">
+      <a href="https://github.com/nor0x/difflog/actions/workflows/ci.yml"><img src="https://github.com/nor0x/difflog/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+      <a href="https://github.com/nor0x/difflog/actions/workflows/publish.yml"><img src="https://github.com/nor0x/difflog/actions/workflows/publish.yml/badge.svg" alt="Publish NuGet status"></a>
+      <a href="https://www.nuget.org/packages/difflog"><img src="https://img.shields.io/nuget/v/difflog.svg" alt="NuGet version"></a>
+      <a href="https://www.nuget.org/packages/difflog"><img src="https://img.shields.io/nuget/dt/difflog.svg" alt="NuGet downloads"></a>
+    </div>
+  </header>
+
+  <main>
+
+    <p>DiffLog is a CLI tool that turns git history into polished release notes using AI. It scans commits, groups changes into clear sections, and formats the result for different audiences so you can ship release notes and changelogs faster.</p>
+
+    <div class="button-row">
+      <a class="btn btn--accent" href="#install">&#9658; Install DiffLog</a>
+      <a class="btn" href="docs.html">&#9776; Full Documentation</a>
+    </div>
+
+    <figure class="screenshot-frame">
+      <img src="assets/screenshot.jpg" alt="DiffLog interactive terminal session generating release notes" width="900">
+      <figcaption>DiffLog's interactive mode, generating release notes straight from the terminal.</figcaption>
+    </figure>
+
+    <h2><span class="bullet">&#9632;</span> Features</h2>
+    <ul class="retro-list">
+      <li>Generate notes from tags, ranges, or date filters.</li>
+      <li>Multiple audiences and output formats (Markdown, HTML, Plain Text, JSON).</li>
+      <li>Optional links to issues/PRs and contributor lists.</li>
+      <li>Interactive mode for guided runs.</li>
+      <li>Configurable system prompts per audience or per run.</li>
+      <li>CI friendly command-line interface.</li>
+    </ul>
+
+    <h2 id="install"><span class="bullet">&#9632;</span> Installation</h2>
+    <p>Install as a .NET tool:</p>
+    <pre><code>dotnet tool install -g DiffLog</code></pre>
+
+    <h2><span class="bullet">&#9632;</span> Quick Start</h2>
+    <pre><code>difflog generate -i</code></pre>
+    <p>That's it — the interactive mode walks you through picking a range, an audience, and an output format.</p>
+
+    <div class="panel">
+      <div class="titlebar">
+        <span>C:\&gt; difflog.exe</span>
+        <span class="dots"><span></span><span></span><span></span></span>
+      </div>
+      <pre><code>difflog generate --from v1.0.0 --to v1.1.0 --format Markdown
+difflog generate -a EndUsers --format Html --output release-notes.html
+difflog generate --system-prompt-file prompts/social.txt</code></pre>
+    </div>
+
+    <h2><span class="bullet">&#9632;</span> Commands at a Glance</h2>
+    <div class="table-scroll">
+    <table>
+      <caption>Top-level commands</caption>
+      <thead>
+        <tr><th>Command</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>difflog generate</code></td><td>Generate release notes from git history.</td></tr>
+        <tr><td><code>difflog config</code></td><td>Store OpenAI settings and per-audience system prompts.</td></tr>
+        <tr><td><code>difflog tags</code></td><td>List tags in a repository.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="center small"><a href="docs.html">See full command reference, options and GitHub Actions examples &raquo;</a></p>
+
+    <div class="callout callout--tip">
+      <strong>Tip:</strong> DiffLog reads config from environment variables (<code>OPENAI_API_KEY</code>, <code>OPENAI_BASE_URL</code>, <code>OPENAI_MODEL</code>) or a saved config file — environment variables always win.
+    </div>
+
+    <hr class="dotted">
+
+    <h2><span class="bullet">&#9632;</span> Dependencies</h2>
+    <ul class="retro-list">
+      <li>.NET 10 SDK</li>
+      <li>Spectre.Console / Spectre.Console.Cli</li>
+      <li>Microsoft.Extensions.AI + OpenAI client</li>
+    </ul>
+
+    <div class="center small" style="margin: 26px 0 6px;">
+      <span class="hitcounter">
+        <span class="digits">BEST VIEWED WITH ANY BROWSER</span>
+      </span>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="foot-links">
+      <a href="https://github.com/nor0x/DiffLog">GitHub Repository</a>
+      <a href="https://www.nuget.org/packages/difflog">NuGet Package</a>
+      <a href="docs.html">Documentation</a>
+      <a href="https://github.com/nor0x/DiffLog/blob/main/LICENSE">MIT License</a>
+    </div>
+    <p class="fineprint">DiffLog &mdash; fork it, star it, and submit pull requests. Happy coding!</p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiffLog Documentation</title>
+<meta name="description" content="Full command reference for DiffLog: generate, config, tags, configuration resolution and GitHub Actions integration.">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="ticker">
+    <div class="ticker__track">
+      <span>★ generate &middot; config &middot; tags ★</span>
+      <span>★ Env vars always take precedence over the saved config file ★</span>
+      <span>★ Drop DiffLog into your release workflow in one step ★</span>
+      <span>★ generate &middot; config &middot; tags ★</span>
+      <span>★ Env vars always take precedence over the saved config file ★</span>
+      <span>★ Drop DiffLog into your release workflow in one step ★</span>
+    </div>
+  </div>
+
+  <nav class="topnav">
+    <a href="index.html">Home</a> <span class="sep">|</span> <a href="docs.html" class="current">Documentation</a> <span class="sep">|</span> <a href="https://github.com/nor0x/DiffLog">GitHub</a> <span class="sep">|</span> <a href="https://www.nuget.org/packages/difflog">NuGet</a>
+  </nav>
+
+  <header class="banner">
+    <img class="logo" src="assets/logo.svg" alt="DiffLog logo" style="width:180px;">
+    <p class="tagline">Documentation</p>
+  </header>
+
+  <main>
+
+    <div class="panel panel--inset">
+      <strong>On this page:</strong>
+      <a href="#generate">generate</a> &middot;
+      <a href="#config">config</a> &middot;
+      <a href="#tags">tags</a> &middot;
+      <a href="#configuration">Configuration</a> &middot;
+      <a href="#actions">GitHub Actions</a> &middot;
+      <a href="#development">Development</a>
+    </div>
+
+    <h2 id="generate"><span class="bullet">&#9632;</span> generate</h2>
+    <p>Generate release notes from git history.</p>
+    <pre><code>difflog generate [options]</code></pre>
+
+    <div class="table-scroll">
+    <table>
+      <caption>Options</caption>
+      <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>-p|--path &lt;PATH&gt;</code></td><td>Repository path (default <code>.</code>).</td></tr>
+        <tr><td><code>-f|--from &lt;REF&gt;</code></td><td>Start reference (tag/branch/commit).</td></tr>
+        <tr><td><code>-t|--to &lt;REF&gt;</code></td><td>End reference (default <code>HEAD</code>).</td></tr>
+        <tr><td><code>-a|--audience &lt;AUDIENCE&gt;</code></td><td>Developers, EndUsers, SocialMedia, Executive.</td></tr>
+        <tr><td><code>--format &lt;FORMAT&gt;</code></td><td>Markdown, Html, PlainText, Json.</td></tr>
+        <tr><td><code>-o|--output &lt;FILE&gt;</code></td><td>Output file path.</td></tr>
+        <tr><td><code>--from-date &lt;DATE&gt;</code></td><td>Include commits from date (yyyy-MM-dd).</td></tr>
+        <tr><td><code>--to-date &lt;DATE&gt;</code></td><td>Include commits until date (yyyy-MM-dd).</td></tr>
+        <tr><td><code>--no-links</code></td><td>Exclude issue/PR links.</td></tr>
+        <tr><td><code>--no-contributors</code></td><td>Exclude contributor list.</td></tr>
+        <tr><td><code>--repo-url &lt;URL&gt;</code></td><td>Repository URL override.</td></tr>
+        <tr><td><code>--exclude &lt;CATEGORIES&gt;</code></td><td>Comma-separated categories to exclude.</td></tr>
+        <tr><td><code>--system-prompt &lt;PROMPT&gt;</code></td><td>Override the system prompt for this run.</td></tr>
+        <tr><td><code>--system-prompt-file &lt;FILE&gt;</code></td><td>Read system prompt from file.</td></tr>
+        <tr><td><code>-i|--interactive</code></td><td>Guided interactive mode.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="panel">
+      <div class="titlebar"><span>Examples</span><span class="dots"><span></span><span></span><span></span></span></div>
+      <pre><code>difflog generate --from v1.0.0 --to v1.1.0 --format Markdown
+difflog generate -a EndUsers --format Html --output release-notes.html
+difflog generate --system-prompt-file prompts/social.txt</code></pre>
+    </div>
+
+    <hr class="dotted">
+
+    <h2 id="config"><span class="bullet">&#9632;</span> config</h2>
+    <p>Store OpenAI settings and optional audience-specific system prompts.</p>
+    <pre><code>difflog config [options]</code></pre>
+
+    <div class="table-scroll">
+    <table>
+      <caption>Options</caption>
+      <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>--api-key &lt;KEY&gt;</code></td><td>OpenAI API key.</td></tr>
+        <tr><td><code>--base-url &lt;URL&gt;</code></td><td>Base URL for OpenAI-compatible APIs.</td></tr>
+        <tr><td><code>--model &lt;MODEL&gt;</code></td><td>Model name (default <code>gpt-4o</code>).</td></tr>
+        <tr><td><code>--audience &lt;AUDIENCE&gt;</code></td><td>Audience to set a custom system prompt for.</td></tr>
+        <tr><td><code>--system-prompt &lt;PROMPT&gt;</code></td><td>Prompt to store for that audience.</td></tr>
+        <tr><td><code>--system-prompt-file &lt;FILE&gt;</code></td><td>Read the prompt from a file.</td></tr>
+        <tr><td><code>-i|--interactive</code></td><td>Prompt for missing values.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="panel">
+      <div class="titlebar"><span>Examples</span><span class="dots"><span></span><span></span><span></span></span></div>
+      <pre><code>difflog config --api-key sk-... --model gpt-4o
+difflog config --audience Developers --system-prompt-file prompts/dev.txt</code></pre>
+    </div>
+
+    <hr class="dotted">
+
+    <h2 id="tags"><span class="bullet">&#9632;</span> tags</h2>
+    <p>List tags in a repository.</p>
+    <pre><code>difflog tags --path .</code></pre>
+
+    <hr class="dotted">
+
+    <h2 id="configuration"><span class="bullet">&#9632;</span> Configuration</h2>
+    <p>DiffLog reads configuration from environment variables or the saved config file:</p>
+    <ul class="retro-list">
+      <li><code>OPENAI_API_KEY</code></li>
+      <li><code>OPENAI_BASE_URL</code></li>
+      <li><code>OPENAI_MODEL</code></li>
+    </ul>
+    <p>The <code>difflog config</code> command saves values to a config file (location is printed after saving). Environment variables always take precedence.</p>
+
+    <div class="callout">
+      <strong>System prompt resolution order:</strong>
+      <ol>
+        <li><code>--system-prompt</code> / <code>--system-prompt-file</code></li>
+        <li>Stored prompt for the selected audience</li>
+        <li>Built-in defaults</li>
+      </ol>
+    </div>
+
+    <hr class="dotted">
+
+    <h2 id="actions"><span class="bullet">&#9632;</span> GitHub Actions</h2>
+    <p>Use DiffLog in your CI/CD pipeline to automatically generate release notes. Add your OpenAI API key as a repository secret (<code>OPENAI_API_KEY</code>).</p>
+
+    <div class="panel">
+      <div class="titlebar"><span>.github/workflows/release-notes.yml</span><span class="dots"><span></span><span></span><span></span></span></div>
+      <pre><code>name: Generate Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for full git history
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install DiffLog
+        run: dotnet tool install -g DiffLog
+
+      - name: Generate Release Notes
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional: override model or base URL
+          # OPENAI_MODEL: gpt-4o
+          # OPENAI_BASE_URL: https://your-endpoint.openai.azure.com
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+
+          if [ -n "$PREV_TAG" ]; then
+            difflog generate --from $PREV_TAG --to $CURRENT_TAG --format Markdown -o release-notes.md
+          else
+            difflog generate --to $CURRENT_TAG --format Markdown -o release-notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md</code></pre>
+    </div>
+
+    <p>For scheduled changelog generation or PR-based workflows:</p>
+    <pre><code>- name: Generate Weekly Changelog
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  run: |
+    difflog generate --from-date $(date -d '7 days ago' +%Y-%m-%d) --format Markdown -o changelog.md</code></pre>
+
+    <hr class="dotted">
+
+    <h2 id="development"><span class="bullet">&#9632;</span> Development</h2>
+    <p>Build and pack locally:</p>
+    <pre><code>dotnet build src/DiffLog.csproj -c Release
+dotnet pack src/DiffLog.csproj -c Release -o ./artifacts</code></pre>
+    <p>or use <code>test-local-tool.ps1</code> to pack and install the tool from source.</p>
+
+    <h3>Dependencies</h3>
+    <ul class="retro-list">
+      <li>.NET 10 SDK</li>
+      <li>Spectre.Console / Spectre.Console.Cli</li>
+      <li>Microsoft.Extensions.AI + OpenAI client</li>
+    </ul>
+
+    <div class="button-row">
+      <a class="btn btn--accent" href="https://github.com/nor0x/DiffLog">&#9658; View on GitHub</a>
+      <a class="btn" href="index.html">&#9650; Back to Top</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="foot-links">
+      <a href="https://github.com/nor0x/DiffLog">GitHub Repository</a>
+      <a href="https://www.nuget.org/packages/difflog">NuGet Package</a>
+      <a href="index.html">Home</a>
+      <a href="https://github.com/nor0x/DiffLog/blob/main/LICENSE">MIT License</a>
+    </div>
+    <p class="fineprint">DiffLog &mdash; fork it, star it, and submit pull requests. Happy coding!</p>
+  </footer>
+
+</div>
+</body>
+</html>
